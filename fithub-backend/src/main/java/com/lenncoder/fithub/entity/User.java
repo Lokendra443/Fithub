@@ -42,5 +42,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String profileImage;
+
+    private String certification;
+
+    private Integer experience;
+
 
 }
