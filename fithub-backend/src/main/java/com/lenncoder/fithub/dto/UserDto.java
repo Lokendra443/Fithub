@@ -25,5 +25,7 @@ public class UserDto {
     private FitnessLevel fitnessLevel;
     private FitnessGoal fitnessGoal;
     private Role role;
+    private String profileImage;
+    private Integer experience;
 
 }
