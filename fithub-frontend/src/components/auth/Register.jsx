@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
+import { registerUser } from '../utils/ApiFunctions';
 
 
 const Register = () => {
+
 
     const [role, setRole] = useState("USER"); // Default role is USER
   const [formData, setFormData] = useState({
@@ -17,8 +19,11 @@ const Register = () => {
     fitnessGoal: "",
     experience: "",
   });
-  const [profileImage, setProfileImage] = useState(null); // File state for profileImage
-  const [certification, setCertification] = useState(null); // File state for certification
+
+
+  const[errorMessage, setErrorMessage] = useState("")
+  const[successMessage, setSuccessMessage] = useState("")
+  
 
   // Handle role change
   const handleRoleChange = (e) => {
@@ -30,18 +35,14 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle file input changes
-  const handleFileChange = (e) => {
-    if (e.target.name === "profileImage") {
-      setProfileImage(e.target.files[0]);
-    } else if (e.target.name === "certification") {
-      setCertification(e.target.files[0]);
-    }
-  };
+  
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
+    setSuccessMessage("");
+
     const dataToSend =
       role === "USER"
         ? {
@@ -65,30 +66,30 @@ const Register = () => {
             role: "TRAINER",
           };
 
-    // Create FormData for file uploads
-    const formDataToSend = new FormData();
-    Object.keys(dataToSend).forEach((key) => {
-      formDataToSend.append(key, dataToSend[key]);
-    });
-    if (profileImage) {
-      formDataToSend.append("profileImage", profileImage);
-    }
-    if (certification && role === "TRAINER") {
-      formDataToSend.append("certification", certification);
+    try {
+      const result = await registerUser(dataToSend);
+      setSuccessMessage("Registration successful! Please login.");
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        gender: "",
+        dateOfBirth: "",
+        height: "",
+        weight: "",
+        fitnessLevel: "",
+        fitnessGoal: "",
+        experience: "",
+      });
+      setRole("USER");
+    } catch (error) {
+      setErrorMessage(error.message);
     }
 
-    try {
-      const response = await axios.post("http://localhost:8080/api/register", formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Registration successful:", response.data);
-      // Add redirection or success message here
-    } catch (error) {
-      console.error("Registration failed:", error);
-      // Add error handling (e.g., display error message)
-    }
+    setTimeout(() =>{
+        setErrorMessage("")
+        setSuccessMessage("")
+    }, 5000)
   };
 
 
@@ -98,6 +99,12 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-200">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl mt-3 mb-3">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Register for FitHub</h2>
+
+        {/* Success and Error Messages */}
+        {successMessage && <h3 className="text-green-600 text-center mb-4">{successMessage}</h3>}
+        {errorMessage && <h3 className="text-red-600 text-center mb-4">{errorMessage}</h3>}
+
+
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           {/* Role Selection */}
           <div className="mb-6">
@@ -168,17 +175,7 @@ const Register = () => {
                 </select>
               </div>
 
-              {/* Profile Image Upload */}
-              <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2">Profile Image</label>
-                <input
-                  type="file"
-                  name="profileImage"
-                  onChange={handleFileChange}
-                  className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  accept="image/*"
-                />
-              </div>
+              
             </div>
 
             {/* Right Column */}
@@ -261,17 +258,6 @@ const Register = () => {
 
               {role === "TRAINER" && (
                 <>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 font-semibold mb-2">Certification</label>
-                    <input
-                      type="file"
-                      name="certification"
-                      onChange={handleFileChange}
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      accept="image/*,application/pdf"
-                      required
-                    />
-                  </div>
 
                   <div className="mb-4">
                     <label className="block text-gray-700 font-semibold mb-2">Experience (years)</label>

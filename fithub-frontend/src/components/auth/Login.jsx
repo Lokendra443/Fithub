@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { loginUser } from '../utils/ApiFunctions';
 
 const Login = () => {
+
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
 
 
 
@@ -10,7 +14,8 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
+
+  
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -20,22 +25,59 @@ const Login = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:8080/api/login", formData);
-      console.log("Login successful:", response.data);
-      // Redirect to dashboard (uncomment and adjust as needed)
-      // window.location.href = "/dashboard";
-    } catch (error) {
-      console.error("Login failed:", error);
-      setError("Invalid email or password. Please try again.");
-    }
+    setError("");
+
+    const res = await loginUser(formData);
+    console.log(res);
+
+
+    if (res && res.token) {
+        // Save token and role to localStorage
+        localStorage.setItem("token", res.token);
+        localStorage.setItem("role", res.role);
+        localStorage.setItem("name", res.name);
+        localStorage.setItem("email", res.email);
+  
+        // Redirect based on role
+        if (res.role === "ADMIN") {
+          navigate("/admin/dashboard");
+        } else if (res.role === "TRAINER") {
+          navigate("/trainer/dashboard");
+        } else if (res.role === "USER") {
+          navigate("/user/dashboard");
+        } else {
+          setError("Invalid role.");
+        }
+      } else {
+        setError("Invalid email or password");
+        setFormData({
+            email: "",
+            password: "",
+          });
+      }
+
+      setTimeout(() =>{
+        setError("")
+    
+    }, 5000)
+
+
+    
   };
+
+ 
 
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Login to FitHub</h2>
+
+        {/* Error Message */}
+        {error && (
+            <div className="mb-4 text-red-500 text-center">{error}</div>
+          )}
+
         <form onSubmit={handleSubmit}>
           {/* Email Field */}
           <div className="mb-4">
@@ -65,10 +107,7 @@ const Login = () => {
             />
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mb-4 text-red-500 text-center">{error}</div>
-          )}
+          
 
           {/* Submit Button */}
           <button
