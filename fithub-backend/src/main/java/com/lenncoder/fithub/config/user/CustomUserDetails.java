@@ -26,6 +26,7 @@ public class CustomUserDetails implements UserDetails {
     private Collection<GrantedAuthority> authorities;
 
     public CustomUserDetails(User user) {
+        this.id = user.getId();
         this.email = user.getEmail();  // Assuming email is used as username
         this.password = user.getPassword();
         this.authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())); // Dynamically assign roles

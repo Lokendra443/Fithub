@@ -1,5 +1,6 @@
 package com.lenncoder.fithub.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lenncoder.fithub.enums.FitnessGoal;
 import com.lenncoder.fithub.enums.FitnessLevel;
 import com.lenncoder.fithub.enums.Gender;
@@ -12,6 +13,7 @@ import lombok.Setter;
 
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -45,6 +47,10 @@ public class User {
     private String profileImage;
 
     private Integer experience;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Workout> workouts; // Relationship with workout
 
 
 }

@@ -3,8 +3,11 @@ package com.lenncoder.fithub.controller;
 import com.lenncoder.fithub.config.jwt.JwtService;
 import com.lenncoder.fithub.config.user.CustomUserDetailsService;
 import com.lenncoder.fithub.dto.UserDto;
+import com.lenncoder.fithub.entity.User;
+import com.lenncoder.fithub.exception.UsernameNotFoundException;
 import com.lenncoder.fithub.payload.request.LoginRequest;
 import com.lenncoder.fithub.payload.response.LoginResponse;
+import com.lenncoder.fithub.repository.UserRepo;
 import com.lenncoder.fithub.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @AllArgsConstructor
 public class AuthController {
 
@@ -28,6 +31,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
     private final JwtService jwtService;
+    private final UserRepo userRepo;
 
 
     @PostMapping("/register")
@@ -49,7 +53,9 @@ public class AuthController {
                 userDetails.getAuthorities().iterator().next().getAuthority()
                         .replace("ROLE_", ""));// Extract the role
 
-        return ResponseEntity.ok().body(new LoginResponse(token, "Login Successful"));
+        User user = userRepo.findByEmail(loginRequest.getEmail()).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+
+        return ResponseEntity.ok().body(new LoginResponse(token,  "Login Successful", user.getRole()));
 
     }
 
