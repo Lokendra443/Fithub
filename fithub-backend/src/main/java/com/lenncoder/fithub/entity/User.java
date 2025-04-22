@@ -1,6 +1,5 @@
 package com.lenncoder.fithub.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lenncoder.fithub.enums.FitnessGoal;
 import com.lenncoder.fithub.enums.FitnessLevel;
 import com.lenncoder.fithub.enums.Gender;
@@ -11,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -48,9 +47,22 @@ public class User {
 
     private Integer experience;
 
+    private LocalDateTime createdAt;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<Workout> workouts; // Relationship with workout
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Goal> goals;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<MealPlan> mealPlans;
+
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
 
 }

@@ -2,7 +2,6 @@ package com.lenncoder.fithub.service.impl;
 
 import com.lenncoder.fithub.config.user.CustomUserDetails;
 import com.lenncoder.fithub.dto.WorkoutDto;
-import com.lenncoder.fithub.entity.User;
 import com.lenncoder.fithub.entity.Workout;
 import com.lenncoder.fithub.exception.ResourceNotFoundException;
 import com.lenncoder.fithub.mapper.WorkoutMapper;
@@ -36,12 +35,11 @@ public class WorkoutServiceImpl implements WorkoutService {
         // Get the currently authenticated user from the SecurityContext
         CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        // Fetch the user entity from the database using the ID from CustomUserDetails
-        User user = userRepo.findById(customUserDetails.getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        // Get the userId from CustomUserDetails
+        Long userId = customUserDetails.getId();
 
-        // Set the user on the workout object
-        workout.setUser(user);
+        // Set the userId on the workout object
+        workout.setUserId(userId);
 
         Workout savedWorkout = workoutRepo.save(workout);
         return workoutMapper.toDto(savedWorkout);
@@ -53,6 +51,11 @@ public class WorkoutServiceImpl implements WorkoutService {
         Workout updatedWorkout = workoutRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Workout not found with id " + id));
         updatedWorkout.setTitle(workoutDto.getTitle());
         updatedWorkout.setDescription(workoutDto.getDescription());
+        updatedWorkout.setWorkoutType(workoutDto.getWorkoutType());
+        updatedWorkout.setIntensity(workoutDto.getIntensity());
+        updatedWorkout.setDuration(workoutDto.getDuration());
+        updatedWorkout.setCaloriesBurned(workoutDto.getCaloriesBurned());
+
         return workoutMapper.toDto(workoutRepo.save(updatedWorkout));
     }
 

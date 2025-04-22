@@ -1,8 +1,5 @@
 package com.lenncoder.fithub.dto;
 
-import com.lenncoder.fithub.entity.User;
-import com.lenncoder.fithub.enums.Intensity;
-import com.lenncoder.fithub.enums.WorkoutType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,15 +11,15 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WorkoutDto {
+public class MealPlanDto {
+
     private Long id;
-    private String title;
+    private String name;
     private String description;
-    private WorkoutType workoutType;
-    private Intensity intensity;
-    private Integer duration;
-    private Integer caloriesBurned;
+    private Integer calories;
+    private Float protein;
+    private Float carbs;
+    private Float fat;
     private LocalDateTime createdAt;
     private Long userId;
-
 }
