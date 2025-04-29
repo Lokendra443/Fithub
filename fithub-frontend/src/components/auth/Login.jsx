@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { loginUser } from '../utils/ApiFunctions';
+import { loginUser } from '../../api/auth.api';
+
 
 const Login = () => {
 
@@ -32,11 +33,13 @@ const Login = () => {
 
 
     if (res && res.token) {
+
         // Save token and role to localStorage
         localStorage.setItem("token", res.token);
         localStorage.setItem("role", res.role);
-        localStorage.setItem("name", res.name);
         localStorage.setItem("email", res.email);
+        localStorage.setItem("userId", res.userId);
+        localStorage.setItem("name", res.name);
   
         // Redirect based on role
         if (res.role === "ADMIN") {

@@ -1,12 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
-import { registerUser } from '../utils/ApiFunctions';
-
+import { registerUser } from '../../api/auth.api';
 
 const Register = () => {
-
-
-    const [role, setRole] = useState("USER"); // Default role is USER
+  const [role, setRole] = useState("USER");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,24 +17,17 @@ const Register = () => {
     experience: "",
   });
 
+  const [errorMessage, setErrorMessage] = useState("")
+  const [successMessage, setSuccessMessage] = useState("")
 
-  const[errorMessage, setErrorMessage] = useState("")
-  const[successMessage, setSuccessMessage] = useState("")
-  
-
-  // Handle role change
   const handleRoleChange = (e) => {
     setRole(e.target.value);
   };
 
-  // Handle text input changes
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -86,27 +76,21 @@ const Register = () => {
       setErrorMessage(error.message);
     }
 
-    setTimeout(() =>{
-        setErrorMessage("")
-        setSuccessMessage("")
+    setTimeout(() => {
+      setErrorMessage("")
+      setSuccessMessage("")
     }, 5000)
   };
 
-
-
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-200">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl mt-3 mb-3">
+      <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg w-full max-w-2xl mt-3 mb-3">
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Register for FitHub</h2>
 
-        {/* Success and Error Messages */}
         {successMessage && <h3 className="text-green-600 text-center mb-4">{successMessage}</h3>}
         {errorMessage && <h3 className="text-red-600 text-center mb-4">{errorMessage}</h3>}
 
-
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
-          {/* Role Selection */}
+        <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <label className="block text-gray-700 font-semibold mb-2">Role</label>
             <select
@@ -119,9 +103,7 @@ const Register = () => {
             </select>
           </div>
 
-          {/* Two-column layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Left Column */}
             <div>
               <div className="mb-4">
                 <label className="block text-gray-700 font-semibold mb-2">Name</label>
@@ -174,11 +156,8 @@ const Register = () => {
                   <option value="OTHER">Other</option>
                 </select>
               </div>
-
-              
             </div>
 
-            {/* Right Column */}
             <div>
               {role === "USER" && (
                 <>
@@ -194,28 +173,30 @@ const Register = () => {
                     />
                   </div>
 
-                  <div className="mb-4">
-                    <label className="block text-gray-700 font-semibold mb-2">Height (cm)</label>
-                    <input
-                      type="number"
-                      name="height"
-                      value={formData.height}
-                      onChange={handleInputChange}
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
+                  <div className="mb-4 grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-2">Height (cm)</label>
+                      <input
+                        type="number"
+                        name="height"
+                        value={formData.height}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      />
+                    </div>
 
-                  <div className="mb-4">
-                    <label className="block text-gray-700 font-semibold mb-2">Weight (kg)</label>
-                    <input
-                      type="number"
-                      name="weight"
-                      value={formData.weight}
-                      onChange={handleInputChange}
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-2">Weight (kg)</label>
+                      <input
+                        type="number"
+                        name="weight"
+                        value={formData.weight}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      />
+                    </div>
                   </div>
 
                   <div className="mb-4">
@@ -257,25 +238,21 @@ const Register = () => {
               )}
 
               {role === "TRAINER" && (
-                <>
-
-                  <div className="mb-4">
-                    <label className="block text-gray-700 font-semibold mb-2">Experience (years)</label>
-                    <input
-                      type="number"
-                      name="experience"
-                      value={formData.experience}
-                      onChange={handleInputChange}
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                </>
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-2">Experience (years)</label>
+                  <input
+                    type="number"
+                    name="experience"
+                    value={formData.experience}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
               )}
             </div>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 mt-6"
@@ -283,20 +260,18 @@ const Register = () => {
             Register
           </button>
 
-          {/* Login Link */}
-            <div className="mt-4 text-center">
+          <div className="mt-4 text-center">
             <p className="text-gray-600">
-                Already have an account?{' '}
-                <Link to="/login" className="text-blue-500 hover:underline">
+              Already have an account?{' '}
+              <Link to="/login" className="text-blue-500 hover:underline">
                 Login
-                </Link>
+              </Link>
             </p>
-            </div>
-          
+          </div>
         </form>
       </div>
     </div>
   )
 }
 
-export default Register
+export default Register;

@@ -15,8 +15,9 @@ const UserDashboard = () => {
       <div className="flex-1 flex flex-col">
         <Navbar/>
         
-        <div className="p-4 overflow-y-auto"> 
-           <Outlet />
+        <div className="p-4 overflow-y-auto bg-gray-100"> 
+          <Outlet />
+        
         </div>
       </div>
     </div>

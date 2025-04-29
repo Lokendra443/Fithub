@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { createWorkout } from '../utils/ApiFunctions';
+import { createWorkout } from '../../../api/workout.api';
+
 
 const AddWorkout = ({ onClose }) => {
   const [workoutData, setWorkoutData] = useState({
@@ -13,6 +14,8 @@ const AddWorkout = ({ onClose }) => {
 
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  
+  
 
   const handleInputChange = (e) => {
     setWorkoutData({ ...workoutData, [e.target.name]: e.target.value });
@@ -34,7 +37,8 @@ const AddWorkout = ({ onClose }) => {
         duration: '',
         caloriesBurned: ''
       });
-      onClose();
+   
+      
     } catch (error) {
       setErrorMessage(error.message || 'Something went wrong.');
     }
@@ -42,7 +46,10 @@ const AddWorkout = ({ onClose }) => {
     setTimeout(() => {
       setErrorMessage('');
       setSuccessMessage('');
-    }, 5000);
+      onClose();  // Close the modal and refresh data
+      
+    }, 2000);
+    
   };
 
   return (

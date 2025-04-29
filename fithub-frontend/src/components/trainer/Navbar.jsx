@@ -14,22 +14,22 @@ import {
   LogoutRounded,
 } from '@mui/icons-material';
 import Logout from '../auth/Logout';
-import { Link } from 'react-router-dom';
+
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [logoutOpen, setLogoutOpen] = useState(false);
 
-
   const [userName, setUserName] = useState("");  // Store user name
+  
+    useEffect(() => {
+      // Get user info from localStorage
+      const user = localStorage.getItem('name'); 
+      if (user) {
+        setUserName(user); // Set the user's name
+      }
+    }, []);
 
-  useEffect(() => {
-    // Get user info from localStorage
-    const user = localStorage.getItem('name'); // Or directly use localStorage.getItem('name')
-    if (user) {
-      setUserName(user); // Set the user's name
-    }
-  }, []);
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -43,7 +43,7 @@ const Navbar = () => {
 
       {/* Left: Logo */}
       <div className="flex items-center">
-        <h1 className="text-2xl font-semibold text-gray-800">User Dashboard</h1>
+        <h1 className="text-2xl font-semibold text-gray-800">Trainer Dashboard</h1>
       </div>
 
       {/* Center: Search Bar */}
@@ -76,7 +76,7 @@ const Navbar = () => {
         </IconButton>
 
         {/* Name (not clickable) */}
-        <span className="text-lg font-medium text-gray-700">{userName || 'User'}</span>
+        <span className="text-lg font-medium text-gray-700">{userName || "Trainer"}</span>
 
         {/* Menu */}
         <Menu
@@ -87,12 +87,8 @@ const Navbar = () => {
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
           <MenuItem onClick={handleMenuClose}>
-          <Link to="/profile">
-          <AccountCircle fontSize="small" className="mr-2" />
+            <AccountCircle fontSize="small" className="mr-2" />
             Profile
-          
-          </Link>
-            
           </MenuItem>
 
           <MenuItem

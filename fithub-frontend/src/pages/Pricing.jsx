@@ -21,7 +21,7 @@ const Pricing = () => {
           <div className="bg-white rounded-lg shadow-lg p-8 text-center transform transition duration-300 hover:scale-105 hover:shadow-xl min-h-[400px] flex flex-col justify-between">
             <div>
               <h2 className="text-3xl font-bold mb-4 text-gray-800">15-Day Free Trial</h2>
-              <p className="text-5xl font-bold mb-6 text-green-600">$0<span className="text-lg font-normal text-gray-600">/15 days</span></p>
+              <p className="text-5xl font-bold mb-6 text-green-600">Rs 0<span className="text-lg font-normal text-gray-600">/15 days</span></p>
               <ul className="text-gray-600 mb-8">
                 <li className="mb-3">Access to all features</li>
                 <li className="mb-3">No credit card required</li>
@@ -42,7 +42,7 @@ const Pricing = () => {
           <div className="bg-white rounded-lg shadow-lg p-8 text-center transform transition duration-300 hover:scale-105 hover:shadow-xl min-h-[400px] flex flex-col justify-between">
             <div>
               <h2 className="text-3xl font-bold mb-4 text-gray-800">3-Month Pack</h2>
-              <p className="text-5xl font-bold mb-6 text-blue-600">$29.99<span className="text-lg font-normal text-gray-600">/3 months</span></p>
+              <p className="text-5xl font-bold mb-6 text-blue-600">Rs 100<span className="text-lg font-normal text-gray-600">/3 months</span></p>
               <ul className="text-gray-600 mb-8">
                 <li className="mb-3">Full access to platform</li>
                 <li className="mb-3">Personalized plans</li>
@@ -63,7 +63,7 @@ const Pricing = () => {
           <div className="bg-white rounded-lg shadow-lg p-8 text-center transform transition duration-300 hover:scale-105 hover:shadow-xl min-h-[400px] flex flex-col justify-between">
             <div>
               <h2 className="text-3xl font-bold mb-4 text-gray-800">6-Month Pack</h2>
-              <p className="text-5xl font-bold mb-6 text-blue-600">$49.99<span className="text-lg font-normal text-gray-600">/6 months</span></p>
+              <p className="text-5xl font-bold mb-6 text-blue-600">Rs 180<span className="text-lg font-normal text-gray-600">/6 months</span></p>
               <ul className="text-gray-600 mb-8">
                 <li className="mb-3">All features included</li>
                 <li className="mb-3">Advanced analytics</li>
