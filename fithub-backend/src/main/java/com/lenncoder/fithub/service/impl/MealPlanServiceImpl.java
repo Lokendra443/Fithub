@@ -1,5 +1,6 @@
 package com.lenncoder.fithub.service.impl;
 
+import com.lenncoder.fithub.config.user.CustomUserDetails;
 import com.lenncoder.fithub.dto.MealPlanDto;
 import com.lenncoder.fithub.entity.MealPlan;
 import com.lenncoder.fithub.exception.ResourceNotFoundException;
@@ -7,6 +8,7 @@ import com.lenncoder.fithub.mapper.MealPlanMapper;
 import com.lenncoder.fithub.repository.MealPlanRepo;
 import com.lenncoder.fithub.service.MealPlanService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,17 @@ public class MealPlanServiceImpl implements MealPlanService {
     @Override
     public MealPlanDto createMealPlan(MealPlanDto mealPlanDto) {
         MealPlan mealPlan = mealPlanMapper.toEntity(mealPlanDto);
+
+        // Get the currently authenticated user from the SecurityContext
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Get the userId from CustomUserDetails
+        Long userId = customUserDetails.getId();
+
+        // Set the userId on the workout object
+        mealPlan.setUserId(userId);
+
+
         return mealPlanMapper.toDto(mealPlanRepo.save(mealPlan));
 
     }

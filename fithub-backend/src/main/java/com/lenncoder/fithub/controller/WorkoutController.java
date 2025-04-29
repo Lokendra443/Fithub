@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/workout")
+@RequestMapping("/api/workout")
 @RequiredArgsConstructor
 public class WorkoutController {
 
@@ -61,19 +61,13 @@ public class WorkoutController {
         return new ResponseEntity<>(workouts, HttpStatus.OK);
     }
 
-
-    // Get all workouts by user ID with filters and pagination
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Page<WorkoutDto>> getWorkoutsByFilters(
-            @PathVariable Long userId,
-            @RequestParam(required = false) LocalDate startDate,
-            @RequestParam(required = false) LocalDate endDate,
-            @RequestParam(required = false) String workoutType,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<WorkoutDto> workouts = workoutService.getWorkoutsByFilters(userId, startDate, endDate, workoutType, pageable);
-        return new ResponseEntity<>(workouts, HttpStatus.OK);
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<List<WorkoutDto>> getWorkoutsByUserId(@PathVariable Long userId) {
+        List<WorkoutDto> allWorkoutsByUser = workoutService.getAllWorkoutsByUser(userId);
+        return new ResponseEntity<>(allWorkoutsByUser, HttpStatus.OK);
     }
+
+
+
 }

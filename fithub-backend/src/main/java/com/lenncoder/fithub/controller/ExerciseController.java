@@ -1,5 +1,6 @@
 package com.lenncoder.fithub.controller;
 
+import com.lenncoder.fithub.dto.CommentDto;
 import com.lenncoder.fithub.dto.ExerciseDto;
 import com.lenncoder.fithub.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/exercise")
+@RequestMapping("/api/exercise")
 @RequiredArgsConstructor
 public class ExerciseController {
 
@@ -44,6 +45,13 @@ public class ExerciseController {
     public ResponseEntity<List<ExerciseDto>> getExerciseByWorkoutId(@PathVariable Long workoutId) {
         List<ExerciseDto> exercises = exerciseService.getExerciseByWorkoutId(workoutId);
         return new ResponseEntity<>(exercises, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ExerciseDto>> getExerciseByUserId(@PathVariable Long userId) {
+        List<ExerciseDto> exerciseByUserId = exerciseService.getExerciseByUserId(userId);
+        return new ResponseEntity<>(exerciseByUserId, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/delete/{id}")

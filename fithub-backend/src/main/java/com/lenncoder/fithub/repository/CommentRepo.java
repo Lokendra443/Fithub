@@ -1,15 +1,14 @@
 package com.lenncoder.fithub.repository;
 
 import com.lenncoder.fithub.entity.Comment;
-import com.lenncoder.fithub.entity.Exercise;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ExerciseRepo extends JpaRepository<Exercise, Long> {
+public interface CommentRepo extends JpaRepository<Comment, Long> {
 
-    List<Exercise> findByWorkoutId(Long workoutId);
-    List<Exercise> findByUserId(Long userId);
+    List<Comment> findByPostId(Long postId);
+    List<Comment> findByUserId(Long userId);
 }

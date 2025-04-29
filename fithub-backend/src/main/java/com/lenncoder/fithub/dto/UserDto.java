@@ -4,13 +4,12 @@ import com.lenncoder.fithub.enums.FitnessGoal;
 import com.lenncoder.fithub.enums.FitnessLevel;
 import com.lenncoder.fithub.enums.Gender;
 import com.lenncoder.fithub.enums.Role;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+
 @Getter
 @Setter
 public class UserDto {

@@ -1,5 +1,6 @@
 package com.lenncoder.fithub.service.impl;
 
+import com.lenncoder.fithub.config.user.CustomUserDetails;
 import com.lenncoder.fithub.dto.ExerciseDto;
 import com.lenncoder.fithub.entity.Exercise;
 import com.lenncoder.fithub.exception.ResourceNotFoundException;
@@ -7,6 +8,7 @@ import com.lenncoder.fithub.mapper.ExerciseMapper;
 import com.lenncoder.fithub.repository.ExerciseRepo;
 import com.lenncoder.fithub.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,16 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public ExerciseDto createExercise(ExerciseDto exerciseDto) {
         Exercise exercise = exerciseMapper.toEntity(exerciseDto);
+
+        // Get the currently authenticated user from the SecurityContext
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Get the userId from CustomUserDetails
+        Long userId = customUserDetails.getId();
+
+        // Set the userId on the workout object
+        exercise.setUserId(userId);
+
         return exerciseMapper.toDto(exerciseRepo.save(exercise));
     }
 
@@ -31,6 +43,11 @@ public class ExerciseServiceImpl implements ExerciseService {
         updatedExercise.setName(exerciseDto.getName());
         updatedExercise.setDescription(exerciseDto.getDescription());
         updatedExercise.setSets(exerciseDto.getSets());
+        updatedExercise.setRepetitions(exerciseDto.getRepetitions());
+        updatedExercise.setDurationInMinutes(exerciseDto.getDurationInMinutes());
+        updatedExercise.setTargetMuscle(exerciseDto.getTargetMuscle());
+        updatedExercise.setEquipment(exerciseDto.getEquipment());
+        updatedExercise.setWorkoutId(exerciseDto.getWorkoutId());
         return exerciseMapper.toDto(exerciseRepo.save(updatedExercise));
     }
 
@@ -54,6 +71,14 @@ public class ExerciseServiceImpl implements ExerciseService {
     public List<ExerciseDto> getExerciseByWorkoutId(Long workoutId) {
         List<Exercise> byWorkoutId = exerciseRepo.findByWorkoutId(workoutId);
         return byWorkoutId.stream()
+                .map(exerciseMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ExerciseDto> getExerciseByUserId(Long userId) {
+        return exerciseRepo.findByUserId(userId)
+                .stream()
                 .map(exerciseMapper::toDto)
                 .collect(Collectors.toList());
     }

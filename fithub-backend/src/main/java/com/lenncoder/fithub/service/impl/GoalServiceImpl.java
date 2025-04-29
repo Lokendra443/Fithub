@@ -1,5 +1,6 @@
 package com.lenncoder.fithub.service.impl;
 
+import com.lenncoder.fithub.config.user.CustomUserDetails;
 import com.lenncoder.fithub.dto.GoalDto;
 import com.lenncoder.fithub.entity.Goal;
 import com.lenncoder.fithub.exception.ResourceNotFoundException;
@@ -7,6 +8,7 @@ import com.lenncoder.fithub.mapper.GoalMapper;
 import com.lenncoder.fithub.repository.GoalRepo;
 import com.lenncoder.fithub.service.GoalService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,16 @@ public class GoalServiceImpl implements GoalService {
     @Override
     public GoalDto createGoal(GoalDto goalDto) {
         Goal goal = goalMapper.toEntity(goalDto);
+
+        // Get the currently authenticated user from the SecurityContext
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Get the userId from CustomUserDetails
+        Long userId = customUserDetails.getId();
+
+        // Set the userId on the workout object
+        goal.setUserId(userId);
+
         return goalMapper.toDto(goalRepo.save(goal));
     }
 
@@ -32,6 +44,9 @@ public class GoalServiceImpl implements GoalService {
         Goal updatedGoal = goalRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Goal not found with id: " + id));
         updatedGoal.setTitle(goalDto.getTitle());
         updatedGoal.setDescription(goalDto.getDescription());
+        updatedGoal.setTargetDate(goalDto.getTargetDate());
+        updatedGoal.setProgress(goalDto.getProgress());
+        updatedGoal.setStatus(goalDto.getStatus());
         return goalMapper.toDto(goalRepo.save(updatedGoal));
     }
 

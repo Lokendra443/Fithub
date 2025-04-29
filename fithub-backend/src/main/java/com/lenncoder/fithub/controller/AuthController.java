@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @AllArgsConstructor
 public class AuthController {
 
@@ -55,7 +55,7 @@ public class AuthController {
 
         User user = userRepo.findByEmail(loginRequest.getEmail()).orElseThrow(()-> new UsernameNotFoundException("User not found"));
 
-        return ResponseEntity.ok().body(new LoginResponse(token,  "Login Successful", user.getRole()));
+        return ResponseEntity.ok().body(new LoginResponse(token,  "Login Successful", user.getEmail(), user.getId(), user.getName(), user.getRole()));
 
     }
 

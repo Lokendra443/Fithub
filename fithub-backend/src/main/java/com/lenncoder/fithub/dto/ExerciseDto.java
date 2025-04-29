@@ -23,4 +23,5 @@ public class ExerciseDto {
     private String equipment;
     private LocalDateTime createdAt;
     private Long workoutId;
+    private Long userId;
 }
