@@ -18,6 +18,7 @@ import {
   Typography
 } from '@mui/material';
 import { deleteUser, getAllUsers } from '../../../api/user.api';
+import { format } from "date-fns";
 
 const ManageUsers = () => {
 
@@ -144,11 +145,13 @@ const ManageUsers = () => {
                     <TableCell>{user.id}</TableCell>
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.dateOfBirth}</TableCell>
+                    <TableCell>
+                      {format(new Date(user.dateOfBirth), "yyyy-MM-dd")}
+                    </TableCell>
                     <TableCell>{user.gender}</TableCell>
                     <TableCell>{user.height}</TableCell>
                     <TableCell>{user.weight}</TableCell>
-                    <TableCell>{user.fitnesLevel}</TableCell>
+                    <TableCell>{user.fitnessLevel}</TableCell>
                     <TableCell>{user.fitnessGoal}</TableCell>
                     <TableCell align="center">
                       <Button size="small" color="error" onClick={() => handleDelete(user.id)}>
