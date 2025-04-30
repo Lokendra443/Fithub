@@ -46,6 +46,10 @@ public class MealPlanServiceImpl implements MealPlanService {
         MealPlan updatedMealPlan = mealPlanRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("MealPlan not found with id: " + id));
         updatedMealPlan.setName(mealPlanDto.getName());
         updatedMealPlan.setDescription(mealPlanDto.getDescription());
+        updatedMealPlan.setProtein(mealPlanDto.getProtein());
+        updatedMealPlan.setCalories(mealPlanDto.getCalories());
+        updatedMealPlan.setCarbs(mealPlanDto.getCarbs());
+        updatedMealPlan.setFat(mealPlanDto.getFat());
         return mealPlanMapper.toDto(mealPlanRepo.save(updatedMealPlan));
     }
 
